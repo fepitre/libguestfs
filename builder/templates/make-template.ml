@@ -484,7 +484,7 @@ and get_virtual_size_gb os arch =
   | Debian _ | Ubuntu _
   | FreeBSD _ -> 6
   | Windows (10, _, _) -> 40    (* Windows 10 *)
-  | Windows (6, _, _) -> 10     (* Windows from 2008 - 2012 *)
+  | Windows (6, _, _) -> 20     (* Windows from 2008 - 2012 *)
   | Windows (5, _, _) -> 6      (* Windows <= 2003 *)
   | Windows _ -> assert false
 
