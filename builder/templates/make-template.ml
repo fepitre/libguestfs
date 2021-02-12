@@ -929,17 +929,17 @@ and make_boot_media os arch =
      let iso_name =
        match major, minor, variant, arch with
        | 6, 1, Client, X86_64 -> (* Windows 7 *)
-          "en_windows_7_ultimate_with_sp1_x64_dvd_u_677332.iso"
+          "windows_7_x64.iso"
        | 10, 0, Client, X86_64 -> (* Windows 10 *)
-          "Win10_20H2_v2_English_x64.iso"
+          "windows_10_x64.iso"
        | 6, 1, Server, X86_64 -> (* Windows 2008 R2 *)
-          "en_windows_server_2008_r2_with_sp1_x64_dvd_617601.iso"
+          "windows_server_2008_r2_x64.iso"
        | 6, 2, Server, X86_64 -> (* Windows Server 2012 *)
-          "en_windows_server_2012_x64_dvd_915478.iso"
+          "windows_server_2012_x64.iso"
        | 6, 3, Server, X86_64 -> (* Windows Server 2012 R2 *)
-          "en_windows_server_2012_r2_with_update_x64_dvd_6052708.iso"
+          "windows_server_2012_r2_x64.iso"
        | 10, 0, Server, X86_64 -> (* Windows Server 2016 *)
-          "en_windows_server_2016_updated_feb_2018_x64_dvd_11636692.iso"
+          "windows_server_2016_x64.iso"
        | _ ->
           eprintf "%s: don't have an installer ISO for this version of Windows\n"
                   prog;
