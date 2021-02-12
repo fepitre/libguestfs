@@ -728,91 +728,83 @@ and make_unattend_iso os arch =
    *)
   fprintf chan "
 <unattend xmlns=\"urn:schemas-microsoft-com:unattend\"
-          xmlns:ms=\"urn:schemas-microsoft-com:asm.v3\"
-          xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\">
+  xmlns:ms=\"urn:schemas-microsoft-com:asm.v3\"
+  xmlns:wcm=\"http://schemas.microsoft.com/WMIConfig/2002/State\">
   <settings pass=\"windowsPE\">
-    <component name=\"Microsoft-Windows-Setup\"
-               publicKeyToken=\"31bf3856ad364e35\"
-               language=\"neutral\"
-               versionScope=\"nonSxS\"
-               processorArchitecture=\"%s\">
-      <UserData>
-        <AcceptEula>true</AcceptEula>
-        <ProductKey>
-          <Key>%s</Key>
-          <WillShowUI>OnError</WillShowUI>
-        </ProductKey>
-      </UserData>
+      <component name=\"Microsoft-Windows-Setup\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" processorArchitecture=\"%s\">
+          <UserData>
+              <AcceptEula>true</AcceptEula>
+              <ProductKey>
+                  <Key>%s</Key>
+                  <WillShowUI>OnError</WillShowUI>
+              </ProductKey>
+          </UserData>
 
-      <DiskConfiguration>
-        <Disk wcm:action=\"add\">
-          <DiskID>0</DiskID>
-          <WillWipeDisk>true</WillWipeDisk>
-          <CreatePartitions>
-            <!-- System partition -->
-            <CreatePartition wcm:action=\"add\">
-              <Order>1</Order>
-              <Type>Primary</Type>
-              <Size>300</Size>
-            </CreatePartition>
-            <!-- Windows partition -->
-            <CreatePartition wcm:action=\"add\">
-              <Order>2</Order>
-              <Type>Primary</Type>
-              <Extend>true</Extend>
-            </CreatePartition>
-          </CreatePartitions>
-          <ModifyPartitions>
-            <!-- System partition -->
-            <ModifyPartition wcm:action=\"add\">
-              <Order>1</Order>
-              <PartitionID>1</PartitionID>
-              <Label>System</Label>
-              <Format>NTFS</Format>
-              <Active>true</Active>
-            </ModifyPartition>
-            <!-- Windows partition -->
-            <ModifyPartition wcm:action=\"add\">
-              <Order>2</Order>
-              <PartitionID>2</PartitionID>
-              <Label>Windows</Label>
-              <Letter>C</Letter>
-              <Format>NTFS</Format>
-            </ModifyPartition>
-          </ModifyPartitions>
-        </Disk>
-        <WillShowUI>OnError</WillShowUI>
-      </DiskConfiguration>
+          <DiskConfiguration>
+              <Disk wcm:action=\"add\">
+                  <DiskID>0</DiskID>
+                  <WillWipeDisk>true</WillWipeDisk>
+                  <CreatePartitions>
+                      <!-- System partition -->
+                      <CreatePartition wcm:action=\"add\">
+                          <Order>1</Order>
+                          <Type>Primary</Type>
+                          <Size>300</Size>
+                      </CreatePartition>
+                      <!-- Windows partition -->
+                      <CreatePartition wcm:action=\"add\">
+                          <Order>2</Order>
+                          <Type>Primary</Type>
+                          <Extend>true</Extend>
+                      </CreatePartition>
+                  </CreatePartitions>
+                  <ModifyPartitions>
+                      <!-- System partition -->
+                      <ModifyPartition wcm:action=\"add\">
+                          <Order>1</Order>
+                          <PartitionID>1</PartitionID>
+                          <Label>System</Label>
+                          <Format>NTFS</Format>
+                          <Active>true</Active>
+                      </ModifyPartition>
+                      <!-- Windows partition -->
+                      <ModifyPartition wcm:action=\"add\">
+                          <Order>2</Order>
+                          <PartitionID>2</PartitionID>
+                          <Label>Windows</Label>
+                          <Letter>C</Letter>
+                          <Format>NTFS</Format>
+                      </ModifyPartition>
+                  </ModifyPartitions>
+              </Disk>
+              <WillShowUI>OnError</WillShowUI>
+          </DiskConfiguration>
 
-      <ImageInstall>
-        <OSImage>
-          <WillShowUI>Never</WillShowUI>
-          <InstallFrom>
-            <MetaData>
-              <Key>/IMAGE/INDEX</Key>
-              <Value>1</Value>
-            </MetaData>
-          </InstallFrom>
-          <InstallTo>
-            <DiskID>0</DiskID>
-            <PartitionID>2</PartitionID>
-          </InstallTo>
-        </OSImage>
-      </ImageInstall>
-    </component>
+          <ImageInstall>
+              <OSImage>
+                  <WillShowUI>Never</WillShowUI>
+                  <InstallFrom>
+                      <MetaData>
+                          <Key>/IMAGE/INDEX</Key>
+                          <Value>1</Value>
+                      </MetaData>
+                  </InstallFrom>
+                  <InstallTo>
+                      <DiskID>0</DiskID>
+                      <PartitionID>2</PartitionID>
+                  </InstallTo>
+              </OSImage>
+          </ImageInstall>
+      </component>
 
-    <component name=\"Microsoft-Windows-International-Core-WinPE\"
-               publicKeyToken=\"31bf3856ad364e35\"
-               language=\"neutral\"
-               versionScope=\"nonSxS\"
-               processorArchitecture=\"%s\">
-      <SetupUILanguage>
-        <UILanguage>en-US</UILanguage>
-      </SetupUILanguage>
-      <SystemLocale>en-US</SystemLocale>
-      <UILanguage>en-US</UILanguage>
-      <UserLocale>en-US</UserLocale>
-    </component>
+      <component name=\"Microsoft-Windows-International-Core-WinPE\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" processorArchitecture=\"%s\">
+          <SetupUILanguage>
+              <UILanguage>en-US</UILanguage>
+          </SetupUILanguage>
+          <SystemLocale>en-US</SystemLocale>
+          <UILanguage>en-US</UILanguage>
+          <UserLocale>en-US</UserLocale>
+      </component>
   </settings>
 </unattend>"
           arch product_key arch;
