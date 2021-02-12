@@ -259,13 +259,16 @@ let rec main () =
 
   (* Sparsify and copy to output name. *)
   printf "Sparsifying ...\n%!";
+  let tmpout_sparsified = sprintf "%s-sparsified.img" tmpname in
+  unlink_on_exit tmpout_sparsified;
+
   let cmd =
-    sprintf "virt-sparsify --inplace --quiet %s" (quote tmpout) in
+    sprintf "virt-sparsify --quiet %s %s" (quote tmpout) (quote tmpout_sparsified) in
   if Sys.command cmd <> 0 then exit 1;
 
   (* Move file to final name before compressing. *)
   let cmd =
-    sprintf "mv %s %s" (quote tmpout) (quote output) in
+    sprintf "mv %s %s" (quote tmpout_sparsified) (quote output) in
   if Sys.command cmd <> 0 then exit 1;
 
   (* Compress the output. *)
