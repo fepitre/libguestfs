@@ -379,6 +379,7 @@ and parse_major_minor ver =
 (* https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions *)
 and parse_windows_version = function
   | "7" -> Windows (6, 1, Client)
+  | "10" -> Windows (10, 0, Client)
   | "2k8r2" -> Windows (6, 1, Server)
   | "2k12" -> Windows (6, 2, Server)
   | "2k12r2" -> Windows (6, 3, Server)
@@ -937,6 +938,8 @@ and make_boot_media os arch =
        match major, minor, variant, arch with
        | 6, 1, Client, X86_64 -> (* Windows 7 *)
           "en_windows_7_ultimate_with_sp1_x64_dvd_u_677332.iso"
+       | 10, 0, Client, X86_64 -> (* Windows 10 *)
+          "Win10_20H2_v2_English_x64.iso"
        | 6, 1, Server, X86_64 -> (* Windows 2008 R2 *)
           "en_windows_server_2008_r2_with_sp1_x64_dvd_617601.iso"
        | 6, 2, Server, X86_64 -> (* Windows Server 2012 *)
@@ -1009,7 +1012,12 @@ and make_virt_install_command os arch ks tmpname tmpout tmpefivars
 
   (*add "--print-xml";*)
 
-  add "--ram=4096";
+  (match os with
+   | Windows (10, _, _) -> (* Windows 10 / 2016 Server*)
+         add "--ram=8192"
+   | _ ->
+         add "--ram=4096"
+  );
 
   (match arch with
    | X86_64 ->
@@ -1082,7 +1090,7 @@ and make_virt_install_command os arch ks tmpname tmpout tmpefivars
 
   (match boot_media with
    | Location location -> add (sprintf "--location=%s" location)
-   | CDRom iso -> add (sprintf "--disk=%s,device=cdrom,boot_order=1" iso)
+   | CDRom iso -> add (sprintf "--cdrom=%s" iso)
   );
 
   (* Windows requires one or two extra CDs!
@@ -1093,10 +1101,9 @@ and make_virt_install_command os arch ks tmpname tmpout tmpefivars
       let unattend_iso =
         match ks with None -> assert false | Some ks -> ks in
       (*add "--disk=/usr/share/virtio-win/virtio-win.iso,device=cdrom,boot_order=98";*)
-      add (sprintf "--disk=%s,device=cdrom,boot_order=99" unattend_iso)
+      add (sprintf "--disk=%s,device=cdrom" unattend_iso);
    | _ -> ()
   );
-
   add "--serial=pty";
   if not (needs_graphics os) then add "--nographics";
 
@@ -1133,6 +1140,7 @@ and os_variant_of_os ?(for_fedora = false) os arch =
     | Windows (6, 1, Server) -> "win2k8r2"
     | Windows (6, 2, Server) -> "win2k12"
     | Windows (6, 3, Server) -> "win2k12r2"
+    | Windows (10, 0, Client) -> "win10"
     | Windows (10, 0, Server) -> "win2k16"
     | Windows _ -> assert false
   )
@@ -1175,6 +1183,7 @@ and os_variant_of_os ?(for_fedora = false) os arch =
     | Windows (6, 1, Server), _ -> "win2k8r2"
     | Windows (6, 2, Server), _ -> "win2k12"
     | Windows (6, 3, Server), _ -> "win2k12r2"
+    | Windows (10, 0, Client), _ -> "win10"
     | Windows (10, 0, Server), _ -> "win2k16"
     | Windows _, _ -> assert false
   )
