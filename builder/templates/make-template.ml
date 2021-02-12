@@ -702,6 +702,12 @@ and make_unattend_iso os arch =
   printf "enter Windows product key: ";
   let product_key = read_line () in
 
+  let product_key_xml =
+    match product_key with
+    | "" -> "<Key/>"
+    | _ -> sprintf "<Key>%s</Key>" product_key
+  in
+
   let output_iso =
     Sys.getcwd () // filename_of_os os arch "-unattend.iso" in
   unlink_on_exit output_iso;
@@ -710,7 +716,7 @@ and make_unattend_iso os arch =
   Unix.mkdir d 0o700;
   let config_dir = d // "config" in
   Unix.mkdir config_dir 0o700;
-  let f = config_dir // "autounattend.xml" in
+  let f = filename_of_os os arch "-autounattend.xml" in
 
   let chan = open_out f in
   let arch =
@@ -735,7 +741,7 @@ and make_unattend_iso os arch =
           <UserData>
               <AcceptEula>true</AcceptEula>
               <ProductKey>
-                  <Key>%s</Key>
+                  %s
                   <WillShowUI>OnError</WillShowUI>
               </ProductKey>
           </UserData>
@@ -835,8 +841,12 @@ and make_unattend_iso os arch =
           </OOBE>
       </component>
   </settings>
-</unattend>" arch product_key arch arch;
+</unattend>" arch product_key_xml arch arch;
   close_out chan;
+
+  let cmd =
+   sprintf "cp %s %s" (quote f) (quote (config_dir // "autounattend.xml")) in
+  if Sys.command cmd <> 0 then exit 1;
 
   let cmd = sprintf "cd %s && mkisofs -o %s -J -r config"
                     (quote d) (quote output_iso) in
