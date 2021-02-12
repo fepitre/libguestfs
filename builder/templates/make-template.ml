@@ -806,8 +806,36 @@ and make_unattend_iso os arch =
           <UserLocale>en-US</UserLocale>
       </component>
   </settings>
-</unattend>"
-          arch product_key arch;
+  <settings pass=\"oobeSystem\">
+      <component name=\"Microsoft-Windows-Shell-Setup\" publicKeyToken=\"31bf3856ad364e35\" language=\"neutral\" versionScope=\"nonSxS\" processorArchitecture=\"%s\">
+          <UserAccounts>
+              <LocalAccounts>
+                  <LocalAccount wcm:action=\"add\">
+                      <Password>
+                          <Value/>
+                      </Password>
+                      <Description/>
+                      <DisplayName/>
+                      <Group>Administrators</Group>
+                      <Name>builder</Name>
+                  </LocalAccount>
+              </LocalAccounts>
+          </UserAccounts>
+          <AutoLogon>
+              <Password>
+                  <Value/>
+              </Password>
+              <Enabled>true</Enabled>
+              <Username>builder</Username>
+          </AutoLogon>
+          <OOBE>
+              <NetworkLocation>Other</NetworkLocation>
+              <ProtectYourPC>3</ProtectYourPC>
+              <SkipMachineOOBE>true</SkipMachineOOBE>
+          </OOBE>
+      </component>
+  </settings>
+</unattend>" arch product_key arch arch;
   close_out chan;
 
   let cmd = sprintf "cd %s && mkisofs -o %s -J -r config"
